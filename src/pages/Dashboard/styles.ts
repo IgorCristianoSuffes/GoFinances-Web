@@ -27,6 +27,9 @@ export const Card = styled.div`
   background: ${({ total }: CardProps): string => (total ? '#FF872C' : '#fff')};
   padding: 22px 32px;
   border-radius: 5px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #5636d3;
   color: ${({ total }: CardProps): string => (total ? '#fff' : '#363F5F')};
 
   header {
@@ -61,6 +64,7 @@ export const TableContainer = styled.section`
       text-align: left;
       font-size: 16px;
       line-height: 24px;
+      
     }
 
     td {
