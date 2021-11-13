@@ -38,6 +38,9 @@ const Dashboard: React.FC = () => {
     async function loadTransactions(): Promise<void> {
 
       const response = await api.get('/transactions');
+      //console.log(response.data.balance);
+      console.log(response.data.transactions);
+      //console.log(response.data.transactions[1][1].category);
       setBalance(response.data.balance);
       setTransactions(response.data.transactions);
     }
@@ -92,7 +95,8 @@ const Dashboard: React.FC = () => {
                     <td>{transaction.category}</td>
                     <td>{transaction.created_at}</td>
                   </tr>
-              ))}
+                ))
+              }
                 {/*}
               <tr>
                 <td className="title">Computer</td>
