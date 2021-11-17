@@ -26,9 +26,9 @@ interface Transaction {
 }
 
 interface Balance {
-  income: number;
-  outcome: number;
-  total: number;
+  income: string;
+  outcome: string;
+  total: string;
 }
 
 const Dashboard: React.FC = () => {
@@ -42,21 +42,21 @@ const Dashboard: React.FC = () => {
 
       const transactionsResponse: Transaction[] = response.data.transactions;
 
-      const transactionsResponseFormattedValueAndDate: Transaction[] = transactionsResponse.map(transactionssss => ({
-        
-        id: transactionssss.id,
-        title: transactionssss.title,
-        value: transactionssss.value,
-        formattedValue: formatValue(transactionssss.value),
-        formattedDate: transactionssss.created_at,
-        type: transactionssss.type,
-        category: {title: transactionssss.category.title},
-        created_at: transactionssss.created_at,
-    })
-    );
+      const transactionsFormatted = response.data.transactions.map((transactionssss: Transaction) => ({
+          ...transactionssss,
+          formattedValue: formatValue(transactionssss.value),
+          formattedDate: new Date(transactionssss.created_at).toLocaleDateString('pt-br'),
+        })
+      );
 
-      setBalance(response.data.balance);
-      setTransactions(transactionsResponseFormattedValueAndDate);
+      const balanceFormatted = {
+        income: formatValue(response.data.balance.income),
+        outcome: formatValue(response.data.balance.outcome),
+        total: formatValue(response.data.balance.total),
+      }
+
+      setBalance(balanceFormatted);
+      setTransactions(transactionsFormatted);
 
       //console.log(new Intl.DateTimeFormat(['ban', 'id']).format(response.data.transactions.formattedValue));
     }
@@ -74,21 +74,21 @@ const Dashboard: React.FC = () => {
               <p>Entradas</p>
               <img src={income} alt="Income" />
             </header>
-            <h1 data-testid="balance-income">{formatValue(balance.income)}</h1>
+            <h1 data-testid="balance-income">{(balance.income)}</h1>
           </Card>
           <Card>
             <header>
               <p>Saídas</p>
               <img src={outcome} alt="Outcome" />
             </header>
-            <h1 data-testid="balance-outcome">-{formatValue(balance.outcome)}</h1>
+            <h1 data-testid="balance-outcome">-{(balance.outcome)}</h1>
           </Card>
           <Card total>
             <header>
               <p>Total</p>
               <img src={total} alt="Total" />
             </header>
-            <h1 data-testid="balance-total">{formatValue(balance.total)}</h1>
+            <h1 data-testid="balance-total">{(balance.total)}</h1>
           </Card>
         </CardContainer>
 
