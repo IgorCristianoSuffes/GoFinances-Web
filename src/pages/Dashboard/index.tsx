@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import income from '../../assets/income.svg';
 import outcome from '../../assets/outcome.svg';
 import total from '../../assets/total.svg';
+import { Link } from "react-router-dom";
 import { format, parseISO } from 'date-fns';
 
 import api from '../../services/api';
@@ -18,7 +19,7 @@ interface Transaction {
   title: string;
   value: number;
   formattedValue: string;
-  formattedDate: string;
+  formattedDate: Date;
   type: 'income' | 'outcome';
   category: { title: string };
   created_at: Date;
@@ -39,9 +40,9 @@ const Dashboard: React.FC = () => {
 
       const response = await api.get('/transactions');
 
-      const teste: Transaction[] = response.data.transactions;
+      const transactionsResponse: Transaction[] = response.data.transactions;
 
-      teste.map(transactionssss => ({
+      const transactionsResponseFormattedValueAndDate: Transaction[] = transactionsResponse.map(transactionssss => ({
         
         id: transactionssss.id,
         title: transactionssss.title,
@@ -54,11 +55,8 @@ const Dashboard: React.FC = () => {
     })
     );
 
-      console.log(formatValue(response.data.transactions[0].value));
-      console.log(teste);
-
       setBalance(response.data.balance);
-      setTransactions(teste);
+      setTransactions(transactionsResponseFormattedValueAndDate);
 
       //console.log(new Intl.DateTimeFormat(['ban', 'id']).format(response.data.transactions.formattedValue));
     }
@@ -83,7 +81,7 @@ const Dashboard: React.FC = () => {
               <p>Saídas</p>
               <img src={outcome} alt="Outcome" />
             </header>
-            <h1 data-testid="balance-outcome">- {formatValue(balance.outcome)}</h1>
+            <h1 data-testid="balance-outcome">-{formatValue(balance.outcome)}</h1>
           </Card>
           <Card total>
             <header>
@@ -111,7 +109,7 @@ const Dashboard: React.FC = () => {
                     <td className="title">{transaction.title}</td>
                     <td className={transaction.type}>{transaction.type === "outcome" && "-"} {transaction.formattedValue}</td>
                     <td>{transaction.category.title}</td>
-                    <td>{(transaction.created_at)}</td>
+                    <td>{(transaction.formattedDate)}</td>
                   </tr>
                 ))
               }
